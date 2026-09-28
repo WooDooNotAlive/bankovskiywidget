@@ -1,0 +1,5 @@
+cache-dir = "C:\\Poetry\\Cache"
+
+[virtualenvs]
+path = "C:\\Poetry\\virtualenvs"
+in-project = false
