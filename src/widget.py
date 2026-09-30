@@ -7,7 +7,7 @@ except ImportError:
 
 
 def mask_account_card(card_or_account_info: str) -> str:
-
+    """Маскирует номер карты или счёта в строке вида 'Название Номер'."""
     if not card_or_account_info or not isinstance(card_or_account_info, str):
         return ""
 
@@ -34,7 +34,7 @@ def mask_account_card(card_or_account_info: str) -> str:
 
 
 def get_date(date_string: str) -> str:
-
+    """Преобразует дату из ISO-формата в строку вида ДД.ММ.ГГГГ."""
     if not date_string or not isinstance(date_string, str):
         return ""
 
@@ -43,7 +43,6 @@ def get_date(date_string: str) -> str:
         return dt.strftime("%d.%m.%Y")
     except ValueError:
         return ""
-
 
 
 if __name__ == "__main__":

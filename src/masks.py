@@ -1,11 +1,14 @@
 def get_mask_card_number(card_number: str) -> str:
+    """Возвращает замаскированный номер карты в формате XXXX XX** **** XXXX."""
     masked = card_number[0:4] + " " + card_number[4:6] + "** **** " + card_number[12:16]
     return masked
 
 
 def get_mask_account(card_number: str) -> str:
+    """Возвращает замаскированный номер счёта в формате **XXXX."""
     masked = "**" + card_number[-4:]
     return masked
+
 
 if __name__ == "__main__":
     print(get_mask_card_number("7000792289606361"))
