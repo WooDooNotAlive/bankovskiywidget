@@ -1,71 +1,42 @@
 # BankWidget
 
-Проект для маскирования банковских данных и обработки списка клиентских операций.
+Проект банковского виджета: маскирование карты/счета и обработка операций.
 
 ## Установка
 
-1. Клонируйте репозиторий.
-2. Создайте и активируйте виртуальное окружение:
-
-```bash
-python -m venv .venv
 ```
-
-Windows:
-
-```bash
+python -m venv .venv
 .venv\Scripts\activate
 ```
 
-macOS / Linux:
-
-```bash
-source .venv/bin/activate
-```
-
-3. При необходимости установите зависимости проекта.
-
 ## Использование
 
-### Фильтрация операций по статусу
-
-Функция `filter_by_state` принимает список словарей с операциями и опциональный параметр `state`
-(по умолчанию `'EXECUTED'`). Возвращает новый список только с подходящими операциями.
+filter_by_state — фильтр операций по state (по умолчанию EXECUTED):
 
 ```python
 from src.processing import filter_by_state
 
-operations = [
+data = [
     {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
     {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
     {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
     {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
 ]
 
-print(filter_by_state(operations))
-print(filter_by_state(operations, "CANCELED"))
+print(filter_by_state(data))
+print(filter_by_state(data, "CANCELED"))
 ```
 
-### Сортировка операций по дате
-
-Функция `sort_by_date` принимает список словарей и параметр `reverse`
-(по умолчанию `True` — сначала более поздние операции).
+sort_by_date — сортировка по дате (по умолчанию сначала новые):
 
 ```python
 from src.processing import sort_by_date
 
-operations = [
-    {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-    {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
-    {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-    {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
-]
-
-print(sort_by_date(operations))
-print(sort_by_date(operations, reverse=False))
+print(sort_by_date(data))
+print(sort_by_date(data, reverse=False))
 ```
 
-### Маскирование карты и счёта
+Маскирование:
 
 ```python
 from src.masks import get_mask_card_number, get_mask_account

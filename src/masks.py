@@ -1,17 +1,11 @@
 def get_mask_card_number(card_number: str) -> str:
-    """Маскирует номер карты: XXXX XX** **** XXXX."""
-    masked = (
-        card_number[0:4]
-        + " "
-        + card_number[4:6]
-        + "** **** "
-        + card_number[12:16]
-    )
+    """Маскирует номер карты."""
+    masked = card_number[0:4] + " " + card_number[4:6] + "** **** " + card_number[12:16]
     return masked
 
 
 def get_mask_account(card_number: str) -> str:
-    """Маскирует номер счёта: **XXXX."""
+    """Маскирует номер счета."""
     masked = "**" + card_number[-4:]
     return masked
 
