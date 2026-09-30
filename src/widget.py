@@ -1,13 +1,10 @@
 from datetime import datetime
 
-try:
-    from src.masks import get_mask_account, get_mask_card_number
-except ImportError:
-    from masks import get_mask_account, get_mask_card_number
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(card_or_account_info: str) -> str:
-    """Маскирует номер карты или счёта в строке вида 'Название Номер'."""
+    """Маскирует номер карты или счёта в строке."""
     if not card_or_account_info or not isinstance(card_or_account_info, str):
         return ""
 
@@ -34,7 +31,7 @@ def mask_account_card(card_or_account_info: str) -> str:
 
 
 def get_date(date_string: str) -> str:
-    """Преобразует дату из ISO-формата в строку вида ДД.ММ.ГГГГ."""
+    """Преобразует ISO-дату в формат ДД.ММ.ГГГГ."""
     if not date_string or not isinstance(date_string, str):
         return ""
 
