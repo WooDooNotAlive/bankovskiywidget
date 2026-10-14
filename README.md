@@ -1,19 +1,15 @@
 # BankWidget
 
-Проект банковского виджета: маскирование карты/счета и обработка операций.
+Проект банковского виджета: маскирование карт/счетов, обработка операций и генераторы для работы с транзакциями.
 
 ## Установка
 
-```
+Использование:
+
+```bash
 python -m venv .venv
 .venv\Scripts\activate
-```
 
-## Использование
-
-filter_by_state — фильтр операций по state (по умолчанию EXECUTED):
-
-```python
 from src.processing import filter_by_state
 
 data = [
@@ -25,25 +21,18 @@ data = [
 
 print(filter_by_state(data))
 print(filter_by_state(data, "CANCELED"))
-```
 
-sort_by_date — сортировка по дате (по умолчанию сначала новые):
 
-```python
 from src.processing import sort_by_date
 
 print(sort_by_date(data))
 print(sort_by_date(data, reverse=False))
-```
 
-Маскирование:
-
-```python
-from src.masks import get_mask_card_number, get_mask_account
-from src.widget import mask_account_card, get_date
+from src.masks import get_mask_account, get_mask_card_number
+from src.widget import get_date, mask_account_card
 
 print(get_mask_card_number("7000792289606361"))
 print(get_mask_account("73654108430135874305"))
 print(mask_account_card("Maestro 1596837868705199"))
 print(get_date("2024-03-11T02:26:18.671407"))
-```
+
