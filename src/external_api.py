@@ -6,11 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_KEY = os.getenv("API_KEY")
+API_KEY = os.getenv("API_KEY") or ""
 
 
 def convert_to_rub(transaction: Dict[str, Any]) -> float:
-    """Принимает словарь с транзакцией и возвращает сумму операции в рублях.
+    """Принимает словарь с транзакцией и возвращает сумму в рублях.
 
     Если транзакция в USD или EUR, обращается к внешнему API.
     """
@@ -33,7 +33,7 @@ def convert_to_rub(transaction: Dict[str, Any]) -> float:
             f"https://api.apilayer.com/exchangerates_data/convert"
             f"?to=RUB&from={currency_code}&amount={amount}"
         )
-        headers = {"apikey": API_KEY}
+        headers: Dict[str, str] = {"apikey": API_KEY}
         try:
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:

@@ -6,7 +6,7 @@ from typing import Any, Dict, Iterator, List
 def filter_by_currency(
     transactions: List[Dict[str, Any]], currency: str
 ) -> Iterator[Dict[str, Any]]:
-    """Фильтрует список транзакций по заданной валюте и возвращает итератор."""
+    """Фильтрует список транзакций по заданной валюте."""
     for transaction in transactions:
         op_amount = transaction.get("operationAmount", {})
         curr = op_amount.get("currency", {})
@@ -17,7 +17,7 @@ def filter_by_currency(
 def transaction_descriptions(
     transactions: List[Dict[str, Any]]
 ) -> Iterator[str]:
-    """Генератор, возвращающий описание каждой операции из списка транзакций."""
+    """Возвращает описание каждой операции из списка транзакций."""
     for transaction in transactions:
         yield transaction.get("description", "")
 
