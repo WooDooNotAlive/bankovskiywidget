@@ -1,27 +1,21 @@
 import logging
 from pathlib import Path
 
-# Путь к папке logs в корне проекта (BankWidget/logs)
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
-# 1. Создание логера для модуля masks
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# 2. Настройка file_handler (перезапись файла mode="w")
 file_handler = logging.FileHandler(
-    LOGS_DIR / "masks.log", mode="w", encoding="utf-8"
+    LOGS_DIR / "masks.log", mode="a", encoding="utf-8"
 )
 
-# 3. Настройка форматера
 file_formatter = logging.Formatter(
     "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 file_handler.setFormatter(file_formatter)
-
-# 4. Добавление хендлера к логеру
 logger.addHandler(file_handler)
 
 
@@ -39,41 +33,38 @@ def get_mask_card_number(card_number: str) -> str:
             "Ошибка маскирования карты: некорректный номер '%s'",
             card_number,
         )
-        first = card_number[0:4]
-        second = card_number[4:6]
-        if len(card_number) >= 16:
-            last = card_number[12:16]
-        else:
-            last = card_number[-4:]
-        masked = first + " " + second + "** **** " + last
+        first = clean_number[:4] if len(clean_number) >= 4 else clean_number
+        second = clean_number[4:6] if len(clean_number) >= 6 else ""
+        last = clean_number[-4:] if len(clean_number) >= 4 else ""
+        masked = f"{first} {second}** **** {last}"
         return masked
 
     first = clean_number[0:4]
     second = clean_number[4:6]
     last = clean_number[12:16]
-    masked = first + " " + second + "** **** " + last
+    masked = f"{first} {second}** **** {last}"
 
     logger.info("Успешно замаскирован номер карты: %s", masked)
     return masked
 
 
-def get_mask_account(card_number: str) -> str:
+def get_mask_account(account_number: str) -> str:
     """Маскирует номер счета."""
     logger.debug(
-        "Вызов функции get_mask_account с аргументом: %s", card_number
+        "Вызов функции get_mask_account с аргументом: %s", account_number
     )
 
-    clean_account = card_number.replace(" ", "")
+    clean_account = account_number.replace(" ", "")
 
     if not clean_account.isdigit() or len(clean_account) < 4:
         logger.error(
             "Ошибка маскирования счета: некорректный номер '%s'",
-            card_number,
+            account_number,
         )
-        if len(card_number) >= 4:
-            masked = "**" + card_number[-4:]
+        if len(clean_account) >= 4:
+            masked = "**" + clean_account[-4:]
         else:
-            masked = "**" + card_number
+            masked = "**" + clean_account
         return masked
 
     masked = "**" + clean_account[-4:]

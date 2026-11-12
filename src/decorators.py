@@ -24,7 +24,7 @@ def log(filename: Optional[str] = None) -> Callable:
                     f"Inputs: {args}, {kwargs}"
                 )
                 _write_log(log_message, filename)
-                raise e
+                raise
 
         return wrapper
 
