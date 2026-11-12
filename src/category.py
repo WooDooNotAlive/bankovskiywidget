@@ -9,7 +9,7 @@ class Category:
 
     name: str
     description: str
-    products: list[Product]
+    __products: list[Product]
 
     def __init__(
         self,
@@ -17,18 +17,27 @@ class Category:
         description: str,
         products: list[Product],
     ) -> None:
-        """Инициализация объекта категории.
-
-        Автоматически увеличивает счётчики
-        category_count и product_count.
-
-        Args:
-            name: Название категории.
-            description: Описание категории.
-            products: Список товаров категории.
-        """
+        """Инициализация объекта категории."""
         self.name = name
         self.description = description
-        self.products = products
+        self.__products = []
         Category.category_count += 1
-        Category.product_count += len(products)
+
+        for product in products:
+            self.add_product(product)
+
+    def add_product(self, product: Product) -> None:
+        """Добавляет продукт в категорию и увеличивает счетчик продуктов."""
+        self.__products.append(product)
+        Category.product_count += 1
+
+    @property
+    def products(self) -> str:
+        """Геттер возвращает список товаров в виде строки по шаблону."""
+        result = ""
+        for product in self.__products:
+            result += (
+                f"{product.name}, {product.price} руб. "
+                f"Остаток: {product.quantity} шт.\n"
+            )
+        return result
