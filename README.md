@@ -174,7 +174,10 @@
      $  poetry run flake8 src tests
      $  poetry run mypy src
 
+## Новое в версии 2.0 (ООП)
 
+- Класс `Product` — товар (название, описание, цена, количество)
+- Класс `Category` — категория с автоподсчётом товаров и категорий
 ════════════════════════════════════════════════════════════════════════
   📌  Автор: WooDooNotAlive
   🔗  GitHub: https://github.com/WooDooNotAlive/bankovskiywidget
