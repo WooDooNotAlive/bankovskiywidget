@@ -1,47 +1,7 @@
-from abc import ABC, abstractmethod
 from typing import Any
 
 
-class BaseProduct(ABC):
-    """Абстрактный базовый класс для всех продуктов."""
-
-    @classmethod
-    @abstractmethod
-    def new_product(cls, product_dict: dict[str, Any]) -> "BaseProduct":
-        """Абстрактный фабричный метод для создания продукта."""
-        pass
-
-    @property
-    @abstractmethod
-    def price(self) -> float:
-        """Абстрактный геттер цены."""
-        pass
-
-    @price.setter
-    @abstractmethod
-    def price(self, new_price: float) -> None:
-        """Абстрактный сеттер цены."""
-        pass
-
-    @abstractmethod
-    def __str__(self) -> str:
-        """Абстрактное строковое представление."""
-        pass
-
-
-class PrintMixin:
-    """Миксин для логирования создания объектов."""
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Печатает информацию о созданном объекте."""
-        print(
-            f"{self.__class__.__name__}"
-            f"({', '.join([repr(a) for a in args])})"
-        )
-        super().__init__()
-
-
-class Product(PrintMixin, BaseProduct):
+class Product:
     """Класс для представления товара."""
 
     name: str
@@ -57,16 +17,15 @@ class Product(PrintMixin, BaseProduct):
         self.description = description
         self.__price = price
         self.quantity = quantity
-        super().__init__(name, description, price, quantity)
 
     def __str__(self) -> str:
         """Строковое отображение товара."""
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other: Any) -> float:
-        """Сложение товаров одного класса."""
-        if type(self) is not type(other):
-            raise TypeError("Нельзя складывать товары разных классов")
+        """Сложение товаров: возвращает общую стоимость товаров на складе."""
+        if not isinstance(other, Product):
+            raise TypeError("Складывать можно только объекты класса Product")
         return (self.price * self.quantity) + (other.price * other.quantity)
 
     @classmethod
@@ -91,54 +50,3 @@ class Product(PrintMixin, BaseProduct):
             print("Цена не должна быть нулевая или отрицательная")
         else:
             self.__price = new_price
-
-
-class Smartphone(Product):
-    """Класс для представления смартфона."""
-
-    efficiency: float
-    model: str
-    memory: int
-    color: str
-
-    def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
-        efficiency: float,
-        model: str,
-        memory: int,
-        color: str,
-    ) -> None:
-        """Инициализация объекта смартфона."""
-        self.efficiency = efficiency
-        self.model = model
-        self.memory = memory
-        self.color = color
-        super().__init__(name, description, price, quantity)
-
-
-class LawnGrass(Product):
-    """Класс для представления газонной травы."""
-
-    country: str
-    germination_period: str
-    color: str
-
-    def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
-        country: str,
-        germination_period: str,
-        color: str,
-    ) -> None:
-        """Инициализация объекта газонной травы."""
-        self.country = country
-        self.germination_period = germination_period
-        self.color = color
-        super().__init__(name, description, price, quantity)
