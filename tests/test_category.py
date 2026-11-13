@@ -1,53 +1,48 @@
-from src.category import Category
-from src.product import Product
+import pytest
+
+from src.category import Category, CategoryIterator
+from src.product import LawnGrass, Product, Smartphone
 
 
-def reset_counts() -> None:
-    """Вспомогательный сброс счетчиков."""
-    Category.category_count = 0
-    Category.product_count = 0
+def test_category_init(first_category: Category) -> None:
+    """Проверка инициализации категории."""
+    assert first_category.name == "Смартфоны"
+    assert Category.category_count >= 1
 
 
-def test_category_init_and_products_getter() -> None:
-    """Проверка инициализации категории и работы геттера products."""
-    reset_counts()
-    p1 = Product("Samsung Galaxy S23 Ultra", "256GB", 180000.0, 5)
-    p2 = Product("Iphone 15", "512GB", 210000.0, 8)
-    cat = Category("Смартфоны", "Мобильные телефоны", [p1, p2])
-
-    expected = (
-        "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.\n"
-        "Iphone 15, 210000.0 руб. Остаток: 8 шт.\n"
-    )
-    assert cat.products == expected
+def test_category_str(first_category: Category) -> None:
+    """Проверка строкового отображения категории."""
+    assert str(first_category) == "Смартфоны, количество продуктов: 27 шт."
 
 
-def test_add_product() -> None:
-    """Проверка добавления товара через add_product."""
-    reset_counts()
-    p1 = Product("Samsung", "Desc", 100.0, 2)
-    cat = Category("Электроника", "Гаджеты", [p1])
-
-    assert Category.product_count == 1
-
-    p2 = Product("iPhone", "Desc", 200.0, 3)
-    cat.add_product(p2)
-
-    assert Category.product_count == 2
-    assert "iPhone, 200.0 руб. Остаток: 3 шт.\n" in cat.products
+def test_add_product_success(first_category: Category) -> None:
+    """Проверка добавления валидного товара."""
+    new_prod = Product("Test Phone", "Desc", 1000.0, 2)
+    initial_count = Category.product_count
+    first_category.add_product(new_prod)
+    assert Category.product_count == initial_count + 1
+    assert "Test Phone" in first_category.products
 
 
-def test_category_and_product_counts() -> None:
-    """Проверка корректности работы счетчиков категорий и товаров."""
-    reset_counts()
-    p1 = Product("A", "D", 10.0, 1)
-    p2 = Product("B", "D", 20.0, 2)
-    p3 = Product("C", "D", 30.0, 3)
+def test_add_product_subclass(first_category: Category) -> None:
+    """Проверка добавления наследников Product (Smartphone, LawnGrass)."""
+    phone = Smartphone("P", "D", 100.0, 1, 99.0, "M", 128, "Red")
+    grass = LawnGrass("G", "D", 50.0, 5, "RU", "3 days", "Green")
+    first_category.add_product(phone)
+    first_category.add_product(grass)
+    assert "P" in first_category.products
+    assert "G" in first_category.products
 
-    c1 = Category("Кат1", "D", [p1, p2])
-    c2 = Category("Кат2", "D", [p3])
 
-    assert c1.name == "Кат1"
-    assert c2.name == "Кат2"
-    assert Category.category_count == 2
-    assert Category.product_count == 3
+def test_add_product_type_error(first_category: Category) -> None:
+    """Проверка исключения TypeError при добавлении стороннего объекта."""
+    with pytest.raises(TypeError):
+        first_category.add_product("Не товар")  # type: ignore
+
+
+def test_category_iterator(first_category: Category) -> None:
+    """Проверка работы итератора."""
+    iterator = CategoryIterator(first_category)
+    items = list(iterator)
+    assert len(items) == 3
+    assert items[0].name == "Samsung Galaxy S23 Ultra"
