@@ -1,8 +1,8 @@
-2026-11-13 10:59:45,190 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: dummy_path.json
-2026-11-13 10:59:45,191 - src.utils - INFO - Успешно получены транзакции из dummy_path.json. Количество: 1
-2026-11-13 10:59:45,193 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: non_existent.json
-2026-11-13 10:59:45,193 - src.utils - ERROR - Файл не найден по пути: non_existent.json
-2026-11-13 10:59:45,197 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: invalid.json
-2026-11-13 10:59:45,198 - src.utils - ERROR - Ошибка чтения JSON в файле invalid.json: Expecting value: line 1 column 1 (char 0)
-2026-11-13 10:59:45,201 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: not_list.json
-2026-11-13 10:59:45,202 - src.utils - ERROR - Содержимое файла not_list.json не список. Получен тип: dict
+2026-11-13 11:33:13,799 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: dummy_path.json
+2026-11-13 11:33:13,800 - src.utils - INFO - Успешно получены транзакции из dummy_path.json. Количество: 1
+2026-11-13 11:33:13,801 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: non_existent.json
+2026-11-13 11:33:13,801 - src.utils - ERROR - Файл не найден по пути: non_existent.json
+2026-11-13 11:33:13,805 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: invalid.json
+2026-11-13 11:33:13,805 - src.utils - ERROR - Ошибка чтения JSON в файле invalid.json: Expecting value: line 1 column 1 (char 0)
+2026-11-13 11:33:13,809 - src.utils - DEBUG - Вызов функции get_financial_transactions с путем: not_list.json
+2026-11-13 11:33:13,809 - src.utils - ERROR - Содержимое файла not_list.json не список. Получен тип: dict

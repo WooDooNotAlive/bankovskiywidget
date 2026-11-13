@@ -9,10 +9,9 @@
 
 ════════════════════════════════════════════════════════════════════════
 
-  💳  Виджет на Python для работы с банковскими транзакциями:
-      маскирование карт и счетов, фильтрация и сортировка операций,
-      конвертация валют, чтение JSON / CSV / Excel, поиск по описаниям
-      и расширенное логирование.
+  💳  Виджет на Python для работы с банковскими транзакциями и
+      модуль интернет-магазина (ООП): маскирование карт, обработка
+      данных, архитектура классов товаров, категорий и заказов.
 
 ════════════════════════════════════════════════════════════════════════
 
@@ -21,13 +20,14 @@
 │  🛠  ТЕХНОЛОГИИ И СТЕК                                              │
 └──────────────────────────────────────────────────────────────────────┘
 
-  •  Python 3.10+                  — язык программирования
-  •  Poetry                        — управление зависимостями и сборка
+  •  Python 3.12+                  — язык программирования
+  •  Poetry / Pip                  — управление зависимостями
   •  Pandas                        — обработка CSV и Excel
-  •  Requests + python-dotenv      — работа с API конвертации валют
-  •  Pytest + pytest-cov           — тестирование (100% покрытие базовых модулей)
+  •  Requests + python-dotenv      — интеграция с внешними API
+  •  Pytest + pytest-cov           — автоматическое тестирование (>90% покрытия)
   •  Flake8 + Mypy                 — линтинг и статическая типизация
-  •  Logging                       — логи в файл и консоль
+  •  Logging                       — расширенное логирование операций
+  •  OOP (Абстракция, Миксины)     — архитектура интернет-магазина
 
 
 ┌──────────────────────────────────────────────────────────────────────┐
@@ -43,32 +43,35 @@
   │   └── utils.log                 # Логи утилит загрузки
   ├── src/
   │   ├── __init__.py
+  │   ├── category.py               # Классы Category и CategoryIterator
   │   ├── decorators.py             # Декоратор логирования @log
   │   ├── external_api.py           # Конвертация USD/EUR → RUB (APILayer)
   │   ├── file_readers.py           # Чтение CSV и XLSX (Pandas)
   │   ├── generators.py             # Генераторы номеров карт и фильтрации
   │   ├── masks.py                  # Маскирование карт и счетов
   │   ├── processing.py             # Фильтрация и сортировка по дате
+  │   ├── product.py                # BaseProduct, Product, Smartphone, LawnGrass, PrintMixin
   │   ├── search.py                 # Поиск по описанию (re) и категории
   │   ├── utils.py                  # Загрузка транзакций из JSON
   │   └── widget.py                 # Маскирование по типу и форматирование дат
   ├── tests/
   │   ├── __init__.py
-  │   ├── conftest.py               # Фикстуры Pytest
+  │   ├── conftest.py               # Единые фикстуры Pytest
+  │   ├── test_category.py          # Тесты категорий и итераторов
   │   ├── test_decorators.py
   │   ├── test_external_api.py
   │   ├── test_file_readers.py
   │   ├── test_generators.py
   │   ├── test_masks.py
   │   ├── test_processing.py
+  │   ├── test_product.py           # Тесты товаров, миксинов и наследников
   │   ├── test_search.py
   │   ├── test_utils.py
   │   └── test_widget.py
   ├── .env.example                  # Пример конфигурации окружения
-  ├── .flake8                       # Настройки линтера
-  ├── main.py                       # Точка входа / пример исполнения
-  ├── mypy.ini                      # Настройки проверки типов
-  ├── pyproject.toml                # Конфигурация Poetry
+  ├── .flake8                       # Настройки линтера (max-line-length = 79)
+  ├── main.py                       # Точка входа / исполняемый скрипт
+  ├── pyproject.toml                # Конфигурация Poetry и Pytest
   └── README.md
 
 
@@ -81,118 +84,105 @@
      git clone https://github.com/WooDooNotAlive/bankovskiywidget.git
      cd bankovskiywidget
 
-  ── 2. Установка зависимостей ─────────────────────────────────────────
+  ── 2. Настройка виртуального окружения ───────────────────────────────
 
-     Через Poetry:
-     $  poetry install
+     py -m venv .venv
+     .venv\Scripts\activate              # Windows PowerShell
+     # source .venv/bin/activate         # Linux/macOS
 
-     Через pip:
-     $  python -m venv .venv
-     $  source .venv/bin/activate        # Linux/macOS
-     $  .venv\Scripts\activate           # Windows
-     $  pip install -r requirements.txt
+  ── 3. Установка зависимостей ─────────────────────────────────────────
 
-  ── 3. Настройка переменных окружения ─────────────────────────────────
+     py -m pip install -r requirements.txt
+     # или через Poetry:
+     # poetry install
 
-     $  cp .env.example .env
+  ── 4. Запуск программы ───────────────────────────────────────────────
 
-     Укажите ваш API-ключ для конвертации валют:
+     py main.py
 
-        API_KEY=ваш_api_ключ_apilayer
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  🛍  МОДУЛЬ ИНТЕРНЕТ-МАГАЗИНА (ООП)                                │
+└──────────────────────────────────────────────────────────────────────┘
+
+  ── Иерархия продуктов (src/product.py) ──────────────────────────────
+
+     • BaseProduct (ABC)            — Абстрактный базовый класс
+     • PrintMixin                   — Миксин для логирования создания объектов
+     • Product                      — Базовый класс товара
+     • Smartphone                   — Наследник: производительность, модель, память, цвет
+     • LawnGrass                    — Наследник: страна, срок прорастания, цвет
+
+  ── Категории и Итераторы (src/category.py) ──────────────────────────
+
+     • Category                     — Категория товаров (приватный список __products)
+     • CategoryIterator             — Итератор для перебора товаров в цикле for
+
+  ── Ключевые фичи ООП ─────────────────────────────────────────────────
+
+     [✔] Инкапсуляция: Геттеры и сеттеры для цены с валидацией (price <= 0).
+     [✔] Фабричный метод: @classmethod new_product() для создания из словаря.
+     [✔] Магические методы: 
+         - __str__ для товаров и категорий
+         - __add__ для сложения стоимости товаров одного класса
+         - __iter__ / __next__ для итерации по категориям
+     [✔] Защита типов: Запрет сложения разных классов и добавления не-продуктов.
+     [✔] Логирование: PrintMixin выводит параметры создания объекта.
 
 
 ┌──────────────────────────────────────────────────────────────────────┐
 │  💡  ПРИМЕРЫ ИСПОЛЬЗОВАНИЯ                                          │
 └──────────────────────────────────────────────────────────────────────┘
 
-  ── Маскирование карт и счетов (src/widget.py) ────────────────────────
+  ── Работа с товарами и категориями ───────────────────────────────────
+
+     from src.product import Smartphone, LawnGrass
+     from src.category import Category, CategoryIterator
+
+     # Создание товаров (сработает PrintMixin логирование)
+     phone1 = Smartphone("iPhone 15", "512GB", 210000.0, 8, 98.2, "15", 512, "Gray")
+     phone2 = Smartphone("Samsung S23", "256GB", 180000.0, 5, 95.5, "S23", 256, "Silver")
+
+     # Сложение товаров одного класса (цена * количество)
+     total_cost = phone1 + phone2  # → 3 580 000.0 руб.
+
+     # Категория
+     category = Category("Смартфоны", "Мобильные устройства", [phone1, phone2])
+     print(str(category))  # → Смартфоны, количество продуктов: 13 шт.
+
+     # Перебор через итератор
+     for product in CategoryIterator(category):
+         print(product)
+
+  ── Маскирование банковских карт и счетов ────────────────────────────
 
      from src.widget import mask_account_card, get_date
 
-     # Маскирование банковской карты
      print(mask_account_card("Visa Classic 6831982476737658"))
      # → Visa Classic 6831 98** **** 7658
 
-     # Маскирование счета
-     print(mask_account_card("Счет 73654108430135874305"))
-     # → Счет **4305
-
-     # ISO-дата → ДД.ММ.ГГГГ
      print(get_date("2024-03-11T02:26:18.671407"))
      # → 11.03.2024
-
-  ── Фильтрация и сортировка (src/processing.py) ───────────────────────
-
-     from src.processing import filter_by_state, sort_by_date
-
-     data = [
-         {"id": 1, "state": "EXECUTED", "date": "2023-01-01T10:00:00"},
-         {"id": 2, "state": "CANCELED", "date": "2023-05-01T10:00:00"}
-     ]
-
-     executed    = filter_by_state(data, state="EXECUTED")
-     sorted_data = sort_by_date(data, reverse=True)
-
-  ── Конвертация валюты через API (src/external_api.py) ────────────────
-
-     from src.external_api import convert_to_rub
-
-     transaction = {
-         "operationAmount": {
-             "amount": "100.0",
-             "currency": {"code": "USD"}
-         }
-     }
-
-     rub_amount = convert_to_rub(transaction)
-     print(f"Сумма в рублях: {rub_amount}")
-
-  ── Чтение CSV и Excel (src/file_readers.py) ──────────────────────────
-
-     from src.file_readers import read_csv_file, read_excel_file
-
-     csv_transactions   = read_csv_file("data/transactions.csv")
-     excel_transactions = read_excel_file("data/transactions.xlsx")
 
 
 ┌──────────────────────────────────────────────────────────────────────┐
 │  🧪  ТЕСТИРОВАНИЕ И КАЧЕСТВО КОДА                                   │
 └──────────────────────────────────────────────────────────────────────┘
 
-  ── Запуск тестов ─────────────────────────────────────────────────────
+  ── Запуск всех юнит-тестов ───────────────────────────────────────────
 
-     $  poetry run pytest
+     py -m pytest
 
-  ── Покрытие тестами ──────────────────────────────────────────────────
+  ── Проверка покрытия кодом (Coverage > 90%) ──────────────────────────
 
-     $  poetry run pytest --cov=src --cov-report=html
+     py -m pytest --cov=src --cov-report=term-missing
 
-     Отчет:  htmlcov/index.html
+  ── Проверка стиля кода (Flake8 PEP 8 Compliance) ─────────────────────
 
-  ── Линтинг и проверка типов ──────────────────────────────────────────
+     py -m flake8 src tests main.py
 
-     $  poetry run flake8 src tests
-     $  poetry run mypy src
-
-## Новое в версии 2.0 (ООП)
-
-- Класс `Product` — товар (название, описание, цена, количество)
-- Класс `Category` — категория с автоподсчётом товаров и категорий
-
-## Режимы доступа и методы (Урок 14.2)
-
-- Приватный атрибут `__products` в `Category` и `__price` в `Product`.
-- Метод `add_product()` для добавления товара и увеличения счетчика `product_count`.
-- Геттер `@property products` в `Category` для строкового представления товаров.
-- Класс-метод `@classmethod new_product()` в `Product` для создания экземпляра из словаря.
-- Геттер и сеттер `@property price` в `Product` с валидацией некорректных цен (<= 0).
-
-## Задание 16.1 — Наследование
-- Реализованы классы-наследники `Smartphone` и `LawnGrass` от класса `Product`.
-- Добавлено ограничение сложения `__add__`: разрешено сложение только товаров одинакового класса (иначе генерируется `TypeError`).
-- Добавлена проверка типов в `Category.add_product()`: разрешено добавление только объектов класса `Product` или его наследников (иначе генерируется `TypeError`).
 ════════════════════════════════════════════════════════════════════════
   📌  Автор: WooDooNotAlive
   🔗  GitHub: https://github.com/WooDooNotAlive/bankovskiywidget
-      Larp is Life. Fr.
+  👀  Larp is Life. Fr.
 ════════════════════════════════════════════════════════════════════════

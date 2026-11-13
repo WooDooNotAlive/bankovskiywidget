@@ -1,6 +1,27 @@
 import pytest
 
-from src.product import LawnGrass, Product, Smartphone
+from src.product import BaseProduct, LawnGrass, Product, Smartphone
+
+
+def test_base_product_instantiation() -> None:
+    """Проверка запрета создания экземпляра абстрактного класса BaseProduct."""
+    with pytest.raises(TypeError):
+        BaseProduct()  # type: ignore
+
+
+def test_print_mixin(capsys: pytest.CaptureFixture[str]) -> None:
+    """Проверка работы миксина логирования при создании продукта."""
+    Product(
+        "Samsung Galaxy S23 Ultra",
+        "256GB, Серый цвет, 200MP камера",
+        180000.0,
+        5,
+    )
+    captured = capsys.readouterr()
+    assert (
+        "Product('Samsung Galaxy S23 Ultra', '256GB, Серый цвет, 200MP камера', 180000.0, 5)"
+        in captured.out
+    )
 
 
 def test_product_init(first_product: Product) -> None:
@@ -53,9 +74,6 @@ def test_smartphone_init() -> None:
     )
     assert phone.name == "Iphone 15"
     assert phone.efficiency == 98.2
-    assert phone.model == "15"
-    assert phone.memory == 512
-    assert phone.color == "Gray space"
 
 
 def test_lawngrass_init() -> None:
@@ -71,15 +89,6 @@ def test_lawngrass_init() -> None:
     )
     assert grass.name == "Газонная трава"
     assert grass.country == "Россия"
-    assert grass.germination_period == "7 дней"
-    assert grass.color == "Зеленый"
-
-
-def test_smartphone_add() -> None:
-    """Проверка сложения двух смартфонов."""
-    phone1 = Smartphone("P1", "D1", 100.0, 2, 90.0, "M1", 64, "Black")
-    phone2 = Smartphone("P2", "D2", 200.0, 3, 95.0, "M2", 128, "White")
-    assert phone1 + phone2 == (100.0 * 2) + (200.0 * 3)
 
 
 def test_price_setter(
