@@ -1,13 +1,10 @@
 from datetime import datetime
 
-try:
-    from src.masks import get_mask_account, get_mask_card_number
-except ImportError:
-    from masks import get_mask_account, get_mask_card_number
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(card_or_account_info: str) -> str:
-
+    """Маскирует карту или счет."""
     if not card_or_account_info or not isinstance(card_or_account_info, str):
         return ""
 
@@ -30,11 +27,11 @@ def mask_account_card(card_or_account_info: str) -> str:
     if not masked_number:
         return ""
 
-    return f"{name} {masked_number}"
+    return name + " " + masked_number
 
 
 def get_date(date_string: str) -> str:
-
+    """Переводит дату из ISO в ДД.ММ.ГГГГ."""
     if not date_string or not isinstance(date_string, str):
         return ""
 
@@ -43,7 +40,6 @@ def get_date(date_string: str) -> str:
         return dt.strftime("%d.%m.%Y")
     except ValueError:
         return ""
-
 
 
 if __name__ == "__main__":
