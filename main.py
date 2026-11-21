@@ -1,7 +1,22 @@
-from src.category import Category, CategoryIterator
+from src.category import Category
 from src.product import Product
 
 if __name__ == "__main__":
+    try:
+        product_invalid = Product(
+            "Бракованный товар", "Неверное количество", 1000.0, 0
+        )
+    except ValueError:
+        print(
+            "Возникла ошибка ValueError прерывающая работу программы "
+            "при попытке добавить продукт с нулевым количеством"
+        )
+    else:
+        print(
+            "Не возникла ошибка ValueError при попытке добавить "
+            "продукт с нулевым количеством"
+        )
+
     product1 = Product(
         "Samsung Galaxy S23 Ultra",
         "256GB, Серый цвет, 200MP камера",
@@ -11,23 +26,11 @@ if __name__ == "__main__":
     product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
     product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
 
-    print(str(product1))
-    print(str(product2))
-    print(str(product3))
-
     category1 = Category(
-        "Смартфоны",
-        "Смартфоны, как средство коммуникации",
-        [product1, product2, product3],
+        "Смартфоны", "Категория смартфонов", [product1, product2, product3]
     )
 
-    print(str(category1))
-    print(category1.products)
+    print(category1.middle_price())
 
-    print(product1 + product2)
-    print(product1 + product3)
-    print(product2 + product3)
-
-    print("\nПроверка итератора категории:")
-    for item in CategoryIterator(category1):
-        print(item)
+    category_empty = Category("Пустая категория", "Категория без продуктов", [])
+    print(category_empty.middle_price())

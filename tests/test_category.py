@@ -40,6 +40,19 @@ def test_add_product_type_error(first_category: Category) -> None:
         first_category.add_product("Не товар")  # type: ignore
 
 
+def test_category_middle_price(first_category: Category) -> None:
+    """Проверка расчета среднего ценника всех товаров категории."""
+    # (180000.0 + 210000.0 + 31000.0) / 3 = 140333.33333333334
+    expected_avg = (180000.0 + 210000.0 + 31000.0) / 3
+    assert first_category.middle_price() == pytest.approx(expected_avg)
+
+
+def test_category_middle_price_empty() -> None:
+    """Проверка расчета среднего ценника для пустой категории (ZeroDivisionError)."""
+    empty_category = Category("Пустая", "Без товаров", [])
+    assert empty_category.middle_price() == 0.0
+
+
 def test_category_iterator(first_category: Category) -> None:
     """Проверка работы итератора."""
     iterator = CategoryIterator(first_category)

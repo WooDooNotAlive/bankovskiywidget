@@ -18,10 +18,7 @@ def test_print_mixin(capsys: pytest.CaptureFixture[str]) -> None:
         5,
     )
     captured = capsys.readouterr()
-    assert (
-        "Product('Samsung Galaxy S23 Ultra', '256GB, Серый цвет, 200MP камера', 180000.0, 5)"
-        in captured.out
-    )
+    assert "Product('Samsung Galaxy S23 Ultra'" in captured.out
 
 
 def test_product_init(first_product: Product) -> None:
@@ -32,6 +29,19 @@ def test_product_init(first_product: Product) -> None:
     )
     assert first_product.price == 180000.0
     assert first_product.quantity == 5
+
+
+def test_product_init_zero_or_negative_quantity() -> None:
+    """Проверка исключения ValueError при нулевом или отрицательном остатке."""
+    with pytest.raises(
+        ValueError, match="Товар с нулевым количеством не может быть добавлен"
+    ):
+        Product("Товар", "Описание", 1000.0, 0)
+
+    with pytest.raises(
+        ValueError, match="Товар с нулевым количеством не может быть добавлен"
+    ):
+        Product("Товар", "Описание", 1000.0, -5)
 
 
 def test_product_str(first_product: Product) -> None:

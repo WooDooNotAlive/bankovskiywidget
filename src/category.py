@@ -30,9 +30,22 @@ class Category:
         return f"{self.name}, количество продуктов: {total_quantity} шт."
 
     def add_product(self, product: Product) -> None:
-        """Добавление продукта в категорию."""
+        """Добавление продукта в категорию с проверкой типа."""
+        if not isinstance(product, Product):
+            raise TypeError(
+                "Можно добавлять только объекты класса Product или "
+                "его дочерних классов"
+            )
         self.__products.append(product)
         Category.product_count += 1
+
+    def middle_price(self) -> float:
+        """Подсчет среднего ценника всех товаров категории."""
+        try:
+            total_price = sum(product.price for product in self.__products)
+            return total_price / len(self.__products)
+        except ZeroDivisionError:
+            return 0.0
 
     @property
     def products(self) -> str:
